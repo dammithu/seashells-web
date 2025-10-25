@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seashells_web</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+      /* Global Font Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'JetBrains Mono', monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Global Keyframe Animations */
+      @keyframes kenburns {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.1); }
+      }
+      
+      @keyframes fadeInUp {
+        0% { 
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% { 
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeInScale {
+        0% { 
+          opacity: 0;
+          transform: scale(0.8) rotate(-10deg);
+        }
+        100% { 
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+      }
+      
+      /* Hide scrollbar for carousel elements */
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
