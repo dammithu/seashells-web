@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 function Restocks() {
@@ -10,6 +10,10 @@ function Restocks() {
     gender: [],
     fit: []
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const products = [
     {
