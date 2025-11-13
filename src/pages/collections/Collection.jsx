@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 function Collection() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [selectedFilters, setSelectedFilters] = useState({
     availability: [],
     price: [],
@@ -87,7 +91,7 @@ function Collection() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="text-sm text-gray-600">
-            <span className="hover:text-gray-900 cursor-pointer">Home</span>
+            <a href="/" className="hover:text-gray-900 cursor-pointer">Home</a>
             <span className="mx-2">/</span>
             <span className="font-bold text-gray-900">Collections</span>
           </div>
