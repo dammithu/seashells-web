@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, ShoppingCart, Menu, X, ChevronDown } from 'lucide-react';
 
 function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const navigate = useNavigate();
 
   const menuItems = [
     { 
@@ -12,9 +14,13 @@ function NavBar() {
       columns: [
         {
           title: 'MEN',
-          items: ['Bracelets', 'Necklaces', 'Rings', 'Cufflinks']
+          items: [
+            { name: 'Bracelets', path: '/collections/men-bracelets' },
+            { name: 'Necklaces', path: '/collections/men-necklaces' },
+            { name: 'Rings', path: '/collections/men-rings' },
+            { name: 'Cufflinks', path: '/collections/men-cufflinks' }
+          ]
         }
-        
       ]
     },
     { 
@@ -23,9 +29,14 @@ function NavBar() {
       columns: [
         {
           title: 'WOMEN',
-          items: ['Necklaces', 'Earrings', 'Bracelets', 'Rings', 'Anklets']
+          items: [
+            { name: 'Necklaces', path: '/collections/women-necklaces' },
+            { name: 'Earrings', path: '/collections/women-earrings' },
+            { name: 'Bracelets', path: '/collections/women-bracelets' },
+            { name: 'Rings', path: '/collections/women-rings' },
+            { name: 'Anklets', path: '/collections/women-anklets' }
+          ]
         }
-        
       ]
     },
     { 
@@ -34,11 +45,16 @@ function NavBar() {
       columns: [
         {
           title: 'ACCESSORIES',
-          items: ['Gift Sets', 'Gift Cards', 'Cleaning Kits', 'Storage']
+          items: [
+            { name: 'Gift Sets', path: '/collections/gift-sets' },
+            { name: 'Gift Cards', path: '/collections/gift-cards' },
+            { name: 'Cleaning Kits', path: '/collections/cleaning-kits' },
+            { name: 'Storage', path: '/collections/storage' }
+          ]
         }
       ]
     },
-    { name: 'GIFTS', hasDropdown: false }
+    { name: 'GIFTS', hasDropdown: false, path: '/gifts' }
   ];
 
   const handleMenuClick = (itemName) => {
@@ -49,16 +65,33 @@ function NavBar() {
     }
   };
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    setOpenDropdown(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const closeAllMenus = () => {
+    setOpenDropdown(null);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-3xl font-bold tracking-wider">
-              <span style={{ color: '#262626' }}>SEA</span>
-              <span className="text-cyan-600">SHELLS</span>
-            </h1>
+            <Link 
+              to="/" 
+              onClick={closeAllMenus}
+              className="cursor-pointer"
+            >
+              <h1 className="text-3xl font-bold tracking-wider">
+                <span style={{ color: '#262626' }}>SEA</span>
+                <span className="text-cyan-600">SHELLS</span>
+              </h1>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
@@ -68,21 +101,32 @@ function NavBar() {
                 key={item.name}
                 className="relative"
               >
-                <button 
-                  className="flex items-center space-x-1 hover:text-cyan-600 font-medium text-base transition-colors cursor-pointer py-2" 
-                  style={{ color: openDropdown === item.name ? '#0891b2' : '#262626' }}
-                  onClick={() => item.hasDropdown && handleMenuClick(item.name)}
-                >
-                  <span>{item.name}</span>
-                  {item.hasDropdown && (
-                    <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
-                  )}
-                </button>
+                {item.hasDropdown ? (
+                  <button 
+                    className="flex items-center space-x-1 hover:text-cyan-600 font-medium text-base transition-colors cursor-pointer py-2" 
+                    style={{ color: openDropdown === item.name ? '#0891b2' : '#262626' }}
+                    onClick={() => handleMenuClick(item.name)}
+                  >
+                    <span>{item.name}</span>
+                    {item.hasDropdown && (
+                      <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                    )}
+                  </button>
+                ) : (
+                  <Link 
+                    to={item.path}
+                    className="flex items-center space-x-1 hover:text-cyan-600 font-medium text-base transition-colors cursor-pointer py-2" 
+                    style={{ color: '#262626' }}
+                    onClick={closeAllMenus}
+                  >
+                    <span>{item.name}</span>
+                  </Link>
+                )}
                 
                 {/* Mega Dropdown */}
                 {item.hasDropdown && openDropdown === item.name && (
                   <div 
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white border-t-2 border-cyan-600 shadow-xl"
+                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white border-t-2 border-cyan-600 shadow-xl z-50"
                     style={{ minWidth: '500px' }}
                   >
                     <div className="flex py-8 px-6">
@@ -93,14 +137,14 @@ function NavBar() {
                           </h3>
                           <ul className="space-y-3">
                             {column.items.map((subItem) => (
-                              <li key={subItem}>
-                                <a
-                                  href="#"
-                                  className="text-sm hover:text-cyan-600 transition-colors block"
+                              <li key={subItem.name}>
+                                <button
+                                  onClick={() => handleNavigation(subItem.path)}
+                                  className="text-sm hover:text-cyan-600 transition-colors block w-full text-left"
                                   style={{ color: '#666' }}
                                 >
-                                  {subItem}
-                                </a>
+                                  {subItem.name}
+                                </button>
                               </li>
                             ))}
                           </ul>
@@ -165,15 +209,24 @@ function NavBar() {
           <div className="md:hidden py-4 border-t border-gray-200">
             {menuItems.map((item) => (
               <div key={item.name} className="py-2">
-                <button 
-                  className="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-base"
-                  onClick={() => handleMenuClick(item.name)}
-                >
-                  <span>{item.name}</span>
-                  {item.hasDropdown && (
-                    <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
-                  )}
-                </button>
+                {item.hasDropdown ? (
+                  <button 
+                    className="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-base"
+                    onClick={() => handleMenuClick(item.name)}
+                  >
+                    <span>{item.name}</span>
+                    {item.hasDropdown && (
+                      <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                    )}
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => handleNavigation(item.path)}
+                    className="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-base"
+                  >
+                    <span>{item.name}</span>
+                  </button>
+                )}
                 
                 {item.hasDropdown && openDropdown === item.name && (
                   <div className="mt-2 ml-4 space-y-4">
@@ -181,13 +234,13 @@ function NavBar() {
                       <div key={idx}>
                         <h4 className="font-bold text-xs mb-2 px-4 text-gray-700">{column.title}</h4>
                         {column.items.map((subItem) => (
-                          <a
-                            key={subItem}
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-600 hover:text-cyan-600 hover:bg-gray-50 rounded-lg"
+                          <button
+                            key={subItem.name}
+                            onClick={() => handleNavigation(subItem.path)}
+                            className="block px-4 py-2 text-sm text-gray-600 hover:text-cyan-600 hover:bg-gray-50 rounded-lg w-full text-left"
                           >
-                            {subItem}
-                          </a>
+                            {subItem.name}
+                          </button>
                         ))}
                       </div>
                     ))}
